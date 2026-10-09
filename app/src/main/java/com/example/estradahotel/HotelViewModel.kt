@@ -64,6 +64,8 @@ class HotelViewModel(application: Application) : AndroidViewModel(application) {
                 for (i in 0 until jsonArray.length()) {
                     val obj = jsonArray.getJSONObject(i)
 
+                    // The real hotel id (1000, 1001, ...) used to find hotels_details.<id>.json
+                    val hotelId = obj.optInt("hotel_id", 0)
                     val name = obj.optString("hotel_name", "Hotel")
                     val rating = obj.optDouble("hotel_rating", 0.0)
                     val distance = obj.optDouble("hotel_to_ski_distance", 0.0)
@@ -71,6 +73,7 @@ class HotelViewModel(application: Application) : AndroidViewModel(application) {
 
                     hotelList.add(
                         HotelEntity(
+                            hotelId = hotelId,
                             name = name,
                             location = "Ski Distance: ${distance}km | Rating: $rating",
                             pricePerNight = rating * 25.0,
