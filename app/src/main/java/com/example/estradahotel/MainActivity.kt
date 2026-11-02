@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(navController = navController, startDestination = "hotelList") {
 
-                        // Screen 1: Hotel List
+
                         composable("hotelList") {
                             HotelScreen(
                                 onHotelClick = { hotelId ->
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        // Screen 2: Booking Details
+
                         composable(
                             route = "bookingDetails/{hotelId}",
                             arguments = listOf(navArgument("hotelId") { type = NavType.IntType })
@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        // Screen 3: Booking Confirm
+
                         composable(
                             route = "bookingConfirm/{hotelId}/{roomIndex}",
                             arguments = listOf(
@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        // Screen 4: My Bookings
+
                         composable("myBookings") {
                             MyBookingsScreen(
                                 bookings = bookings,
@@ -162,7 +162,7 @@ fun HotelScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Search
+
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.onSearchQueryChange(it) },
@@ -184,7 +184,7 @@ fun HotelScreen(
                 shape = MaterialTheme.shapes.medium
             )
 
-            // Hotel Cards List
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),

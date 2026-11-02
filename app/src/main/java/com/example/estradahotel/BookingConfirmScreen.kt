@@ -136,7 +136,7 @@ fun BookingConfirmScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                // Hotel Name Header Banner
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -161,7 +161,7 @@ fun BookingConfirmScreen(
                     }
                 }
 
-                // Selected Room Summary Card
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -194,7 +194,7 @@ fun BookingConfirmScreen(
                     }
                 }
 
-                // Form Section
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -213,7 +213,7 @@ fun BookingConfirmScreen(
                             color = MaterialTheme.colorScheme.onSurface
                         )
 
-                        // Name fields
+
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             OutlinedTextField(
                                 value = firstName,
@@ -233,7 +233,7 @@ fun BookingConfirmScreen(
                             )
                         }
 
-                        // Dates
+
                         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             DateField(
                                 label = "Check-in date",
@@ -249,7 +249,7 @@ fun BookingConfirmScreen(
                             )
                         }
 
-                        // Guests & Rooms
+
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -299,7 +299,7 @@ fun BookingConfirmScreen(
                             }
                         }
 
-                        // Business Travel Option
+
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
@@ -332,7 +332,7 @@ fun BookingConfirmScreen(
                             }
                         }
 
-                        // Payment Method Option
+
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             colors = CardDefaults.cardColors(
@@ -361,7 +361,7 @@ fun BookingConfirmScreen(
                             }
                         }
 
-                        // Price calculation summary
+
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically

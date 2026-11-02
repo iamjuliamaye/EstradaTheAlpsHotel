@@ -71,7 +71,7 @@ fun BookingDetailsScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "No details for this hotel yet. Please choose hotel 1000 or 1008.",
+                    text = "No details for this hotel yet.",
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -83,7 +83,7 @@ fun BookingDetailsScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                // Tabs styled like the main screen theme
+
                 TabRow(
                     selectedTabIndex = selectedTab,
                     containerColor = MaterialTheme.colorScheme.surface,
@@ -113,7 +113,7 @@ fun BookingDetailsScreen(
                     }
                 }
 
-                // Hotel Name Header Banner
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -140,7 +140,7 @@ fun BookingDetailsScreen(
                     }
                 }
 
-                // Tab Content
+
                 when (selectedTab) {
                     0 -> GuestReviewsTab(details = details)
                     else -> RoomSelectionTab(rooms = details.rooms, onRoomClick = onRoomClick)
@@ -159,7 +159,7 @@ private fun GuestReviewsTab(details: HotelDetails) {
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Ratings Area
+
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
