@@ -47,16 +47,20 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val context = LocalContext.current
-                    val viewModel: HotelViewModel = viewModel()
+
+                    val bookingViewModel: BookingViewModel = viewModel()
+                    val bookings by bookingViewModel.bookings.collectAsState()
 
                     NavHost(navController = navController, startDestination = "hotelList") {
 
-                        // Screen 1: Hotel list
+                        // Screen 1: Hotel List
                         composable("hotelList") {
                             HotelScreen(
-                                viewModel = viewModel,
                                 onHotelClick = { hotelId ->
                                     navController.navigate("bookingDetails/$hotelId")
+                                },
+                                onMyBookingsClick = {
+                                    navController.navigate("myBookings")
                                 }
                             )
                         }
@@ -86,20 +90,26 @@ class MainActivity : ComponentActivity() {
                         ) { entry ->
                             val hotelId = entry.arguments?.getInt("hotelId") ?: 0
                             val roomIndex = entry.arguments?.getInt("roomIndex") ?: 0
-
                             BookingConfirmScreen(
                                 hotelId = hotelId,
                                 roomIndex = roomIndex,
                                 onBackClick = { navController.popBackStack() },
                                 onBookNow = { booking ->
-                                    viewModel.insertBooking(booking)
-                                    Toast.makeText(
-                                        context,
-                                        "Booking confirmed for ${booking.firstName}!",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    navController.popBackStack("hotelList", inclusive = false)
+                                    bookingViewModel.saveBooking(booking) {
+                                        Toast.makeText(context, "Booking saved!", Toast.LENGTH_SHORT).show()
+                                        navController.navigate("myBookings") {
+                                            popUpTo("hotelList")
+                                        }
+                                    }
                                 }
+                            )
+                        }
+
+                        // Screen 4: My Bookings
+                        composable("myBookings") {
+                            MyBookingsScreen(
+                                bookings = bookings,
+                                onBackClick = { navController.popBackStack() }
                             )
                         }
                     }
@@ -113,6 +123,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HotelScreen(
     onHotelClick: (Int) -> Unit,
+    onMyBookingsClick: () -> Unit = {},
     viewModel: HotelViewModel = viewModel()
 ) {
     val hotels by viewModel.hotels.collectAsState()
@@ -136,10 +147,10 @@ fun HotelScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Profile action */ }) {
+                    IconButton(onClick = onMyBookingsClick) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_account_circle_24),
-                            contentDescription = "User Profile"
+                            contentDescription = "My Bookings"
                         )
                     }
                 }
