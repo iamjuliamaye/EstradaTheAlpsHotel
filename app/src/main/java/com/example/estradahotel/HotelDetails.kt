@@ -4,13 +4,13 @@ import android.content.Context
 import android.util.Log
 import org.json.JSONObject
 
-// One rating line
+
 data class Rating(val category: String, val score: Double)
 
-// One guest review
+
 data class Review(val username: String, val country: String, val text: String)
 
-// One room offered by a hotel.
+
 data class HotelRoom(
     val id: Int,
     val type: String,
@@ -20,7 +20,7 @@ data class HotelRoom(
     val pricePerNight: Int
 )
 
-// Everything the Booking Details screen needs for one hotel
+
 data class HotelDetails(
     val id: Int,
     val name: String,
@@ -31,9 +31,7 @@ data class HotelDetails(
 
 object HotelDetailsLoader {
 
-    // Reads hotel details from assets.
-    // Loads details ONLY if an exact JSON file exists for the hotel (e.g. hotels_details.1000.json or hotels_details.1008.json).
-    // Returns null for any hotel that does not have its own JSON file.
+
     fun load(context: Context, hotelId: Int): HotelDetails? {
         val exactFileExists = try {
             context.assets.open("hotels_details.$hotelId.json").close()

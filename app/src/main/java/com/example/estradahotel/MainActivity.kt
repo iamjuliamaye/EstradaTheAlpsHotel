@@ -117,7 +117,7 @@ fun HotelScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Search field
+
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.onSearchQueryChange(it) },
@@ -146,7 +146,7 @@ fun HotelScreen(
                 shape = MaterialTheme.shapes.medium
             )
 
-            // Hotel Cards List
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
@@ -167,7 +167,6 @@ fun HotelCard(
 ) {
     val imageUri = "file:///android_asset/${hotel.imageName}"
 
-    // Parse values from location string
     val skiDistance = hotel.location.substringBefore("|").trim()
     val ratingString = hotel.location.substringAfter("Rating:").trim()
     val ratingNumeric = ratingString.toDoubleOrNull() ?: 0.0
@@ -210,7 +209,7 @@ fun HotelCard(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Rating
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -331,7 +330,7 @@ fun BookingDetailsScreen(
                     .fillMaxSize()
                     .padding(innerPadding)
             ) {
-                // Tabs
+
                 TabRow(
                     selectedTabIndex = selectedTabIndex,
                     containerColor = Color.Black,
@@ -361,7 +360,7 @@ fun BookingDetailsScreen(
                     }
                 }
 
-                // Hotel Name Bar
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -397,7 +396,6 @@ fun GuestReviewsTab(details: HotelDetails) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // Ratings Area
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = "Ratings",
@@ -489,7 +487,7 @@ fun ReviewItemCard(review: Review) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Circle with reviewer initial
+
                 Box(
                     modifier = Modifier
                         .size(40.dp)
@@ -615,7 +613,7 @@ fun RoomItemCard(room: HotelRoom) {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Room features box
+
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),

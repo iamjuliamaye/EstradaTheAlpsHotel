@@ -17,10 +17,10 @@ import org.json.JSONArray
 class HotelViewModel(application: Application) : AndroidViewModel(application) {
     private val dao = AppDatabase.getDatabase(application).hotelDao()
 
-    // State for the current search query string
+
     val searchQuery = MutableStateFlow("")
 
-    // Combines the database hotel list with the search query to produce filtered results
+
     val hotels: StateFlow<List<HotelEntity>> = combine(
         dao.getAllHotels(),
         searchQuery
@@ -64,7 +64,7 @@ class HotelViewModel(application: Application) : AndroidViewModel(application) {
                 for (i in 0 until jsonArray.length()) {
                     val obj = jsonArray.getJSONObject(i)
 
-                    // The real hotel id (1000, 1001, ...) used to find hotels_details.<id>.json
+
                     val hotelId = obj.optInt("hotel_id", 0)
                     val name = obj.optString("hotel_name", "Hotel")
                     val rating = obj.optDouble("hotel_rating", 0.0)
