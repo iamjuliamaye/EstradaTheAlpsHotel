@@ -47,19 +47,21 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     val context = LocalContext.current
+                    val viewModel: HotelViewModel = viewModel()
 
                     NavHost(navController = navController, startDestination = "hotelList") {
 
-
+                        // Screen 1: Hotel list
                         composable("hotelList") {
                             HotelScreen(
+                                viewModel = viewModel,
                                 onHotelClick = { hotelId ->
                                     navController.navigate("bookingDetails/$hotelId")
                                 }
                             )
                         }
 
-
+                        // Screen 2: Booking Details
                         composable(
                             route = "bookingDetails/{hotelId}",
                             arguments = listOf(navArgument("hotelId") { type = NavType.IntType })
@@ -69,8 +71,34 @@ class MainActivity : ComponentActivity() {
                                 hotelId = hotelId,
                                 onBackClick = { navController.popBackStack() },
                                 onRoomClick = { roomIndex ->
+                                    navController.navigate("bookingConfirm/$hotelId/$roomIndex")
+                                }
+                            )
+                        }
 
-                                    Toast.makeText(context, "Room #$roomIndex tapped", Toast.LENGTH_SHORT).show()
+                        // Screen 3: Booking Confirm
+                        composable(
+                            route = "bookingConfirm/{hotelId}/{roomIndex}",
+                            arguments = listOf(
+                                navArgument("hotelId") { type = NavType.IntType },
+                                navArgument("roomIndex") { type = NavType.IntType }
+                            )
+                        ) { entry ->
+                            val hotelId = entry.arguments?.getInt("hotelId") ?: 0
+                            val roomIndex = entry.arguments?.getInt("roomIndex") ?: 0
+
+                            BookingConfirmScreen(
+                                hotelId = hotelId,
+                                roomIndex = roomIndex,
+                                onBackClick = { navController.popBackStack() },
+                                onBookNow = { booking ->
+                                    viewModel.insertBooking(booking)
+                                    Toast.makeText(
+                                        context,
+                                        "Booking confirmed for ${booking.firstName}!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    navController.popBackStack("hotelList", inclusive = false)
                                 }
                             )
                         }
@@ -83,7 +111,10 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HotelScreen(onHotelClick: (Int) -> Unit, viewModel: HotelViewModel = viewModel()) {
+fun HotelScreen(
+    onHotelClick: (Int) -> Unit,
+    viewModel: HotelViewModel = viewModel()
+) {
     val hotels by viewModel.hotels.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
 
@@ -120,7 +151,7 @@ fun HotelScreen(onHotelClick: (Int) -> Unit, viewModel: HotelViewModel = viewMod
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
+            // Search
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.onSearchQueryChange(it) },
@@ -142,14 +173,13 @@ fun HotelScreen(onHotelClick: (Int) -> Unit, viewModel: HotelViewModel = viewMod
                 shape = MaterialTheme.shapes.medium
             )
 
-
+            // Hotel Cards List
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(hotels) { hotel ->
-
                     HotelCard(hotel = hotel, onClick = { onHotelClick(hotel.hotelId) })
                 }
             }
@@ -160,7 +190,6 @@ fun HotelScreen(onHotelClick: (Int) -> Unit, viewModel: HotelViewModel = viewMod
 @Composable
 fun HotelCard(hotel: HotelEntity, onClick: () -> Unit) {
     val imageUri = "file:///android_asset/${hotel.imageName}"
-
 
     val skiDistance = hotel.location.substringBefore("|").trim()
     val ratingString = hotel.location.substringAfter("Rating:").trim()
@@ -179,7 +208,6 @@ fun HotelCard(hotel: HotelEntity, onClick: () -> Unit) {
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             AsyncImage(
                 model = imageUri,
                 contentDescription = hotel.name,
@@ -190,7 +218,6 @@ fun HotelCard(hotel: HotelEntity, onClick: () -> Unit) {
             )
 
             Spacer(modifier = Modifier.width(16.dp))
-
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -204,7 +231,6 @@ fun HotelCard(hotel: HotelEntity, onClick: () -> Unit) {
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -213,7 +239,6 @@ fun HotelCard(hotel: HotelEntity, onClick: () -> Unit) {
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-
 
                     StarRatingBar(rating = ratingNumeric)
 
@@ -228,7 +253,6 @@ fun HotelCard(hotel: HotelEntity, onClick: () -> Unit) {
                 }
 
                 Spacer(modifier = Modifier.height(2.dp))
-
 
                 Text(
                     text = skiDistance,

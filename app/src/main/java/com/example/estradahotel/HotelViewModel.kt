@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.estradahotel.data.AppDatabase
+import com.example.estradahotel.data.BookingEntity
 import com.example.estradahotel.data.HotelEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,11 +16,11 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 
 class HotelViewModel(application: Application) : AndroidViewModel(application) {
-    private val dao = AppDatabase.getDatabase(application).hotelDao()
-
+    private val database = AppDatabase.getDatabase(application)
+    private val dao = database.hotelDao()
+    private val bookingDao = database.bookingDao()
 
     val searchQuery = MutableStateFlow("")
-
 
     val hotels: StateFlow<List<HotelEntity>> = combine(
         dao.getAllHotels(),
@@ -47,6 +48,12 @@ class HotelViewModel(application: Application) : AndroidViewModel(application) {
         searchQuery.value = newQuery
     }
 
+    fun insertBooking(booking: BookingEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            bookingDao.insertBooking(booking)
+        }
+    }
+
     private fun loadHotelsFromAssets() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -63,7 +70,6 @@ class HotelViewModel(application: Application) : AndroidViewModel(application) {
 
                 for (i in 0 until jsonArray.length()) {
                     val obj = jsonArray.getJSONObject(i)
-
 
                     val hotelId = obj.optInt("hotel_id", 0)
                     val name = obj.optString("hotel_name", "Hotel")
